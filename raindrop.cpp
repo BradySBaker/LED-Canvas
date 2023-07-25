@@ -50,7 +50,7 @@ void raindrop() {
       }
       int curPos = pgm_read_word(&LED_MAP[rainDrops[j][0]][rainDrops[j][1]]);
 
-      COLORS color = palleteColors[rainDrops[j][4]];
+      COLORS color = paletteColors[rainDrops[j][4]];
 
       int timeSinceDrop = rainDrops[j][2] - rainDrops[j][3];
 

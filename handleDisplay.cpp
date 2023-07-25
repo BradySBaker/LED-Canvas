@@ -28,9 +28,16 @@ void displayFrame(String dir) {
   file.close();
   // Update the LED panel with the new colors
   FastLED.show();
-  bluetooth.print("successful");
 }
 
+bool isValidInput(const String& input) {
+    for (size_t i = 0; i < input.length(); i++) {
+        if (!isdigit(input.charAt(i))) {
+            return false; // Found a non-digit character, return false
+        }
+    }
+    return true; // All characters are digits
+}
 
 void handleDraw(char charBuffer[20]) {
   // Serial.println(charBuffer);
@@ -47,10 +54,17 @@ void handleDraw(char charBuffer[20]) {
     String x = positions[i].substring(0, commaPos);
     String y = positions[i].substring(commaPos + 1);
 
+    if (!isValidInput(x) || !isValidInput(y)) {
+        Serial.println("Invalid input value");
+        bluetooth.print("INVALID");
+        return;
+    }
+    Serial.print(x.toInt());
+    Serial.println(y.toInt());
     int curPos = pgm_read_word(&LED_MAP[x.toInt()][y.toInt()]);
-    leds[curPos].r = Colors[0];
-    leds[curPos].g = Colors[1];
-    leds[curPos].b = Colors[2];
+    leds[curPos].r = Colors.r;
+    leds[curPos].g = Colors.g;
+    leds[curPos].b = Colors.b;
   }
   FastLED.show();
   bluetooth.print("successful");
@@ -59,8 +73,6 @@ void handleDraw(char charBuffer[20]) {
 
 void handleAnimPlay() {
   String dirName = "/anims/" + playingAnim + "/";
-
-  Serial.println("Attempting to play animation from" + dirName);
 
   int result = 0;
   File dir = SD.open(dirName);
@@ -71,40 +83,26 @@ void handleAnimPlay() {
     }
     result++;
     displayFrame(dirName + String(result) + ".TXT");
-    Serial.println("Loading frame " + String(result));
     file.close();
   }
   dir.close();
 }
 
 
-void handleColorChange(char charBuffer[20], bool rain) {
+void handleColorChange(char charBuffer[20], bool rainAudio) {
   char hexColorString[10] = "";
-  if (rain) {
-      strcpy(hexColorString, &charBuffer[3]); //3 = crr
-      bluetooth.print("cRAIN");
+  if (rainAudio) {
+      strcpy(hexColorString, &charBuffer[2]); //2 = cm
+      bluetooth.print("CM");
   } else {
-      strcpy(hexColorString, &charBuffer[2]); //2 = cr
-        bluetooth.print("successful");
+      strcpy(hexColorString, &charBuffer[1]); //1 = c
+      bluetooth.print("successful");
   }
-  unsigned long colorInt = 0;
-  //http://www.asciitable.com
-  for (int i = 0; i < 6; i++) {
-    if (hexColorString[i] < 97) { //number parts
-      colorInt = colorInt + (((long)hexColorString[i] - 48) << ((5 - i) * 4));
-    } else { //letter in hex parts
-      colorInt = colorInt + (((long)hexColorString[i] - 97  + 10) << ((5 - i) * 4));
-    }
-  }
-  byte redColor = (colorInt >> 16) & 0xFF;
-  byte greenColor = (colorInt >> 8) & 0xFF;
-  byte blueColor = colorInt & 0xFF;
-  if (!rain) {
-    Colors[0] = redColor;
-    Colors[1] = greenColor;
-    Colors[2] = blueColor;
+  if (!rainAudio) {
+    Colors = hexToRGB(hexColorString);
+    Serial.println(hexColorString);
   } else {
-    palleteColors[curColorLength] = {redColor, greenColor, blueColor};
+    paletteColors[curColorLength] = hexToRGB(hexColorString);
     curColorLength++;
   }
 }

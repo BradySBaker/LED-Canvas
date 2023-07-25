@@ -24,20 +24,22 @@ void handleBluetooth() {
       raindropAmount = atoi(numString);
       bluetooth.print("RAIN");
       raindrop();
-    } else if (strstr(charBuffer, "SR") == &charBuffer[0]) { //Handle stop rain
-      bluetooth.print("sRAIN");
+    } else if (strstr(charBuffer, "SM") == &charBuffer[0]) { //Handle stop rain/audio visualizer
+      Serial.println("Stopped mode");
+      bluetooth.print("SM");
       curColorLength = 0;
       raining = false;
-    } else if(strstr(charBuffer, "CRR") == &charBuffer[0]) { //Handle rain color added
+      avActive = false;
+    } else if(strstr(charBuffer, "CM") == &charBuffer[0]) { //Handle rain/audio visualizer color added
       handleColorChange(charBuffer, true);
-    } else if (strstr(charBuffer, "CR") == &charBuffer[0]) { //Handle color change
+    } else if (strstr(charBuffer, "C") == &charBuffer[0]) { //Handle color change
       handleColorChange(charBuffer, false);
     } else if (strstr(charBuffer, "P") == &charBuffer[0]) { //Handle pixel drawing
       handleDraw(charBuffer);
-    } else if (strstr(charBuffer, "AV") == &charBuffer[0]) { //Handle audio visualizer
-      Serial.println("audio visual");
+    } else if (strstr(charBuffer, "HAV") == &charBuffer[0]) { //Handle audio visualizer
+      avActive = true;
+      bluetooth.print("HAV");
       audioVisualizer();
-      bluetooth.print("AV");
     } else if (strstr(charBuffer, "S") == &charBuffer[0]) { //Handle frame save
       handleFrameSave(charBuffer, false);
     } else if (strstr(charBuffer, "F") == &charBuffer[0]) { //Handle display frame
@@ -61,6 +63,7 @@ void handleBluetooth() {
      char nameString[7] = "";
      strcpy(nameString, &charBuffer[1]);
      playingAnim = String(nameString);
+     bluetooth.print("successful");
     } else if (strstr(charBuffer, "Z") == &charBuffer[0]) { //Handle animation delete
      handleAnimDelete(charBuffer);
     }

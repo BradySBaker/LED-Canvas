@@ -20,7 +20,14 @@ int i = 0, val;
 
 int fallingPixels[16];
 
+COLORS interpolateColor(const COLORS& startColor, const COLORS& endColor, float progress) {
+  COLORS result;
 
+  result.r = startColor.r + static_cast<byte>((endColor.r - startColor.r) * progress);
+  result.g = startColor.g + static_cast<byte>((endColor.g - startColor.g) * progress);
+  result.b = startColor.b + static_cast<byte>((endColor.b - startColor.b) * progress);
+  return result;
+}
 
 void resetPixels() {
   for (int i = 0; i < 16; i++) {
@@ -32,7 +39,8 @@ void resetPixels() {
 void audioVisualizer() {
   sampling_period_us = round(1000000 * (1.0 / SAMPLING_FREQ));
   resetPixels();
-  while(true) {
+  while(avActive) {
+    handleBluetooth();
     for (int i = 0; i<16; i++){
       bandValues[i] = 0;
     }
@@ -68,14 +76,17 @@ void audioVisualizer() {
       }
     }
     FastLED.clear();
-      for (byte x = 0; x < 16;x++) {
+      for (byte x = 0; x < 16; x++) {
         // Scale the bars for the display
         int barHeight = bandValues[x] / AMPLITUDE;
         for (byte y = 0; y < barHeight; y++) {
-          const int curPos = pgm_read_word(&LED_MAP[x][15-y]);
-          leds[curPos].r = 255/(y+1);
-          leds[curPos].g = 0;
-          leds[curPos].b = ((y+1) * 16) - 1;
+          const int curPos = pgm_read_word(&LED_MAP[15-y][x]);
+          float progress = static_cast<float>(y) / static_cast<float>(barHeight);
+          progress *= progress;
+          COLORS color = interpolateColor(paletteColors[0], paletteColors[1], progress);
+          leds[curPos].r = color.r;
+          leds[curPos].g = color.g;
+          leds[curPos].b = color.b;
         }
         if (barHeight > fallingPixels[x]) {
           fallingPixels[x] = barHeight;
@@ -83,7 +94,7 @@ void audioVisualizer() {
           fallingPixels[x]--;
         }
         if (fallingPixels[x] > 0) {
-          const int fallPos =  pgm_read_word(&LED_MAP[x][15-fallingPixels[x]]);
+          const int fallPos =  pgm_read_word(&LED_MAP[15-fallingPixels[x]][x]);
           leds[fallPos].r = 0;
           leds[fallPos].g = 255;
           leds[fallPos].b = 0;

@@ -20,6 +20,8 @@ void handleAnimDelete(char charBuffer[20]);
 int readFileCount(String directory);
 void sendFileNames(String dir, bool anims);
 
+COLORS hexToRGB(const char* hexColorString);
+
 void raindrop();
 
 void audioVisualizer();
@@ -28,15 +30,18 @@ extern CRGB leds[256];
 
 extern SoftwareSerial bluetooth;
 
-extern byte Colors[3];
+extern COLORS Colors;
 
 extern String playingAnim;
 
-//Raindrop stuff
+//Raindrop vars
 extern bool raining;
 extern int raindropAmount;
 extern int curColorLength;
-extern COLORS palleteColors[6];
+extern COLORS paletteColors[6];
 extern String background;
+
+//AV vars
+extern bool avActive;
 
 #endif
