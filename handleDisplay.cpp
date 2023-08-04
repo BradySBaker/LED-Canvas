@@ -1,12 +1,12 @@
 #include "BlueFunctions.h"
 
-void displayFrame(String dir) {
+bool displayFrame(String dir) {
   // Open the colors file on the SD card
   File file = SD.open(dir);
   if (!file) {
     Serial.println("File open failed!");
       bluetooth.print("failed");
-    return;
+    return false;
   }
   
   // Loop through all the pixels on the LED panel
@@ -28,6 +28,7 @@ void displayFrame(String dir) {
   file.close();
   // Update the LED panel with the new colors
   FastLED.show();
+  return true;
 }
 
 bool isValidInput(const String& input) {
@@ -82,7 +83,9 @@ void handleAnimPlay() {
       break; // No more files
     }
     result++;
-    displayFrame(dirName + String(result) + ".TXT");
+    if (!displayFrame(dirName + String(result) + ".TXT")) {
+      return;
+    };
     file.close();
   }
   dir.close();

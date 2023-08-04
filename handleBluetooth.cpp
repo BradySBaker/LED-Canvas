@@ -30,6 +30,8 @@ void handleBluetooth() {
       curColorLength = 0;
       raining = false;
       avActive = false;
+    } else if (strstr(charBuffer, "CMP")) { //Handle color palette
+      getPaletteAndSet(charBuffer);
     } else if(strstr(charBuffer, "CM") == &charBuffer[0]) { //Handle rain/audio visualizer color added
       handleColorChange(charBuffer, true);
     } else if (strstr(charBuffer, "C") == &charBuffer[0]) { //Handle color change

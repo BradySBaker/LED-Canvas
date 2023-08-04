@@ -8,7 +8,7 @@ CRGB leds[256];
 
 SoftwareSerial bluetooth(10, 11);
 
-COLORS Colors(255, 0, 0);
+COLORS Colors(200, 200, 200);
 
 String playingAnim = "~";
 
@@ -28,6 +28,25 @@ COLORS hexToRGB(const char* hexColorString) {
   return result;
 };
 
+void modifyPaletteColors(COLORS* palette, int numColors) {
+  curColorLength = numColors;
+  for (int i = 0; i < numColors; i++) {
+    Serial.println(i);
+    paletteColors[i] = palette[i];
+  }
+}
+
+void getPaletteAndSet(const char* colorName) {
+    if (strcmp(colorName, "CMPred") == 0) {
+      modifyPaletteColors(red, 4);
+    } else if (strcmp(colorName, "CMPblue") == 0) {
+      modifyPaletteColors(blue, 4);
+    } else if (strcmp(colorName, "CMPgreen") == 0) {
+      modifyPaletteColors(green, 4);
+    } else if (strcmp(colorName, "CMPpurple") == 0) {
+      modifyPaletteColors(purple, 4);
+    }
+}
 COLORS paletteColors[6] = {};
 
 // Raindrop Variables

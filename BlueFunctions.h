@@ -9,7 +9,7 @@
 #include <SD.h>
 #include <SPI.h>
 
-void displayFrame(String dir);
+bool displayFrame(String dir);
 void handleColorChange(char charBuffer[20], bool rain);
 void handleBluetooth();
 void handleDraw(char charBuffer[20]);
@@ -19,6 +19,8 @@ void handleFrameDelete(char charBuffer[20]);
 void handleAnimDelete(char charBuffer[20]);
 int readFileCount(String directory);
 void sendFileNames(String dir, bool anims);
+
+void getPaletteAndSet(const char* colorName);
 
 COLORS hexToRGB(const char* hexColorString);
 
@@ -40,7 +42,6 @@ extern int raindropAmount;
 extern int curColorLength;
 extern COLORS paletteColors[6];
 extern String background;
-
 //AV vars
 extern bool avActive;
 
