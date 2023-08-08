@@ -38,13 +38,13 @@ void modifyPaletteColors(COLORS* palette, int numColors) {
 
 void getPaletteAndSet(const char* colorName) {
     if (strcmp(colorName, "CMPred") == 0) {
-      modifyPaletteColors(red, 4);
+      modifyPaletteColors(red, 3);
     } else if (strcmp(colorName, "CMPblue") == 0) {
-      modifyPaletteColors(blue, 4);
+      modifyPaletteColors(blue, 3);
     } else if (strcmp(colorName, "CMPgreen") == 0) {
-      modifyPaletteColors(green, 4);
+      modifyPaletteColors(green, 3);
     } else if (strcmp(colorName, "CMPpurple") == 0) {
-      modifyPaletteColors(purple, 4);
+      modifyPaletteColors(purple, 3);
     }
 }
 COLORS paletteColors[6] = {};

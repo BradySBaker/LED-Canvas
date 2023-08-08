@@ -19,9 +19,15 @@ void handleBluetooth() {
       bluetooth.print("OFF");
     } else if (strstr(charBuffer, "R") == &charBuffer[0]) { //Handle rain signal
       raining = true;
-      char numString[3] = "";
+      char numString[2] = "";
       strcpy(numString, &charBuffer[1]);
       raindropAmount = atoi(numString);
+      if (charBuffer[3] != '\0') {
+        Serial.println("occured");
+        char frameName[7] = "";
+        strcpy(frameName, &charBuffer[3]);
+        background = frameName;
+      }
       bluetooth.print("RAIN");
       raindrop();
     } else if (strstr(charBuffer, "SM") == &charBuffer[0]) { //Handle stop rain/audio visualizer
@@ -32,6 +38,7 @@ void handleBluetooth() {
       avActive = false;
     } else if (strstr(charBuffer, "CMP")) { //Handle color palette
       getPaletteAndSet(charBuffer);
+      bluetooth.print("successful");
     } else if(strstr(charBuffer, "CM") == &charBuffer[0]) { //Handle rain/audio visualizer color added
       handleColorChange(charBuffer, true);
     } else if (strstr(charBuffer, "C") == &charBuffer[0]) { //Handle color change

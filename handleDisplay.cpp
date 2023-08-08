@@ -96,16 +96,13 @@ void handleColorChange(char charBuffer[20], bool rainAudio) {
   char hexColorString[10] = "";
   if (rainAudio) {
       strcpy(hexColorString, &charBuffer[2]); //2 = cm
+      paletteColors[curColorLength] = hexToRGB(hexColorString);
+      curColorLength++;
       bluetooth.print("CM");
   } else {
       strcpy(hexColorString, &charBuffer[1]); //1 = c
+      Colors = hexToRGB(hexColorString);
+      Serial.println(hexColorString);
       bluetooth.print("successful");
-  }
-  if (!rainAudio) {
-    Colors = hexToRGB(hexColorString);
-    Serial.println(hexColorString);
-  } else {
-    paletteColors[curColorLength] = hexToRGB(hexColorString);
-    curColorLength++;
   }
 }
