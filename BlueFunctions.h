@@ -26,7 +26,7 @@ COLORS hexToRGB(const char* hexColorString);
 
 void raindrop();
 
-void audioVisualizer();
+void audioVisualizer(bool pixelFall);
 
 extern CRGB leds[256];
 
@@ -42,6 +42,7 @@ extern int raindropAmount;
 extern int curColorLength;
 extern COLORS paletteColors[6];
 extern String background;
+extern int animSpeed;
 //AV vars
 extern bool avActive;
 

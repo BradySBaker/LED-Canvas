@@ -15,15 +15,21 @@ void handleBluetooth() {
    if(strstr(charBuffer, "OFF") == &charBuffer[0]) { //Handle off signal
       FastLED.clear();
       FastLED.show();
+      animSpeed = 5;
       playingAnim = "~";
       bluetooth.print("OFF");
+    } else if (strstr(charBuffer, "B") == &charBuffer[0]) { // Handle brightness
+      char brightness[3] = "";
+      strcpy(brightness, &charBuffer[1]);
+      FastLED.setBrightness(atoi(brightness));
+      FastLED.show();
+      bluetooth.println("success");
     } else if (strstr(charBuffer, "R") == &charBuffer[0]) { //Handle rain signal
       raining = true;
       char numString[2] = "";
       strcpy(numString, &charBuffer[1]);
       raindropAmount = atoi(numString);
       if (charBuffer[3] != '\0') {
-        Serial.println("occured");
         char frameName[7] = "";
         strcpy(frameName, &charBuffer[3]);
         background = frameName;
@@ -38,7 +44,7 @@ void handleBluetooth() {
       avActive = false;
     } else if (strstr(charBuffer, "CMP")) { //Handle color palette
       getPaletteAndSet(charBuffer);
-      bluetooth.print("successful");
+      bluetooth.print("success");
     } else if(strstr(charBuffer, "CM") == &charBuffer[0]) { //Handle rain/audio visualizer color added
       handleColorChange(charBuffer, true);
     } else if (strstr(charBuffer, "C") == &charBuffer[0]) { //Handle color change
@@ -48,7 +54,11 @@ void handleBluetooth() {
     } else if (strstr(charBuffer, "HAV") == &charBuffer[0]) { //Handle audio visualizer
       avActive = true;
       bluetooth.print("HAV");
-      audioVisualizer();
+      if (charBuffer[3] == '1') {
+        audioVisualizer(true);
+      } else {
+        audioVisualizer(false);
+      }
     } else if (strstr(charBuffer, "S") == &charBuffer[0]) { //Handle frame save
       handleFrameSave(charBuffer, false);
     } else if (strstr(charBuffer, "F") == &charBuffer[0]) { //Handle display frame
@@ -61,6 +71,7 @@ void handleBluetooth() {
         displayFrame("/drawings/" + String(nameString) + ".TXT");
       }
     } else if (strstr(charBuffer, "names") == &charBuffer[0]) { //Handle retrieve frame ammount
+      Colors = COLORS(200, 200, 200);
       sendFileNames("/drawings", false);
       sendFileNames("/ANIMS", true);
       bluetooth.print("~");
@@ -70,9 +81,12 @@ void handleBluetooth() {
       handleFrameSave(charBuffer, true);
     } else if (strstr(charBuffer, "I") == &charBuffer[0]) { //Handle animation play
      char nameString[7] = "";
-     strcpy(nameString, &charBuffer[1]);
+     char animSpeedString[1] = "";
+     strcpy(animSpeedString, &charBuffer[1]);
+     strcpy(nameString, &charBuffer[2]);
+     animSpeed = pow(5-atoi(animSpeedString), 5);
      playingAnim = String(nameString);
-     bluetooth.print("successful");
+     bluetooth.print("success");
     } else if (strstr(charBuffer, "Z") == &charBuffer[0]) { //Handle animation delete
      handleAnimDelete(charBuffer);
     }
