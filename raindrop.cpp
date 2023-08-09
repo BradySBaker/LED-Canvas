@@ -22,7 +22,7 @@ void raindrop() {
     rainDrops[i][1] = random(0, 16); //X position
     rainDrops[i][2] = 0; //Time
     rainDrops[i][3] = random(0, 16); //Execution Time
-    rainDrops[i][4] = random(0, curColorLength); //Color index
+    rainDrops[i][4] = random(0, curColorLength + 1); //Color index
 
     rainDrops[i][5] = 0;
     rainDrops[i][6] = raindropSpeed;

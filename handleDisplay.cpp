@@ -60,8 +60,6 @@ void handleDraw(char charBuffer[20]) {
         bluetooth.print("INVALID");
         return;
     }
-    Serial.print(x.toInt());
-    Serial.println(y.toInt());
     int curPos = pgm_read_word(&LED_MAP[x.toInt()][y.toInt()]);
     leds[curPos].r = Colors.r;
     leds[curPos].g = Colors.g;
@@ -103,6 +101,6 @@ void handleColorChange(char charBuffer[20], bool rainAudio) {
       strcpy(hexColorString, &charBuffer[1]); //1 = c
       Colors = hexToRGB(hexColorString);
       Serial.println(hexColorString);
-      bluetooth.print("successful");
+      bluetooth.print("success");
   }
 }

@@ -26,7 +26,7 @@ COLORS hexToRGB(const char* hexColorString);
 
 void raindrop();
 
-void audioVisualizer();
+void audioVisualizer(bool pixelFall);
 
 extern CRGB leds[256];
 

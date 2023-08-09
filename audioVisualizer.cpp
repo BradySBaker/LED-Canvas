@@ -36,7 +36,21 @@ void resetPixels() {
   fallingPixels[1] = 15;
 }
 
-void audioVisualizer() {
+void drawFallingPixel(int barHeight, int x) {
+  if (barHeight > fallingPixels[x]) {
+    fallingPixels[x] = barHeight;
+  } else {
+    fallingPixels[x]--;
+  }
+  if (fallingPixels[x] > 0) {
+    const int fallPos =  pgm_read_word(&LED_MAP[15-fallingPixels[x]][x]);
+    leds[fallPos].r = paletteColors[2].r;
+    leds[fallPos].g = paletteColors[2].g;
+    leds[fallPos].b = paletteColors[2].b;
+  }
+};
+
+void audioVisualizer(bool pixelFall) {
   sampling_period_us = round(1000000 * (1.0 / SAMPLING_FREQ));
   resetPixels();
   while(avActive) {
@@ -88,16 +102,8 @@ void audioVisualizer() {
           leds[curPos].g = color.g;
           leds[curPos].b = color.b;
         }
-        if (barHeight > fallingPixels[x]) {
-          fallingPixels[x] = barHeight;
-        } else {
-          fallingPixels[x]--;
-        }
-        if (fallingPixels[x] > 0) {
-          const int fallPos =  pgm_read_word(&LED_MAP[15-fallingPixels[x]][x]);
-          leds[fallPos].r = 0;
-          leds[fallPos].g = 255;
-          leds[fallPos].b = 0;
+        if (pixelFall) {
+          drawFallingPixel(barHeight, x);
         }
       }
 
