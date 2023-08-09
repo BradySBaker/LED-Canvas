@@ -13,21 +13,29 @@ COLORS Colors(200, 200, 200);
 String playingAnim = "~";
 
 COLORS hexToRGB(const char* hexColorString) {
-    COLORS result;
-    unsigned long colorInt = 0;
-    for (int i = 0; i < 6; i++) {
-    if (hexColorString[i] < 97) { //number parts
-      colorInt = colorInt + (((long)hexColorString[i] - 48) << ((5 - i) * 4));
-    } else { //letter in hex parts
-      colorInt = colorInt + (((long)hexColorString[i] - 97  + 10) << ((5 - i) * 4));
+  COLORS result;
+  unsigned long colorInt = 0;
+  
+  for (int i = 0; i < 6; i++) {
+    if (hexColorString[i] >= '0' && hexColorString[i] <= '9') {
+      colorInt = colorInt + (((long)hexColorString[i] - '0') << ((5 - i) * 4));
+    } else if (hexColorString[i] >= 'a' && hexColorString[i] <= 'f') {
+      colorInt = colorInt + (((long)hexColorString[i] - 'a' + 10) << ((5 - i) * 4));
+    } else if (hexColorString[i] >= 'A' && hexColorString[i] <= 'F') {
+      colorInt = colorInt + (((long)hexColorString[i] - 'A' + 10) << ((5 - i) * 4));
     }
   }
+
   result.r = (colorInt >> 16) & 0xFF;
   result.g = (colorInt >> 8) & 0xFF;
   result.b = colorInt & 0xFF;
-  return result;
-};
 
+  Serial.println(result.r);
+  Serial.println(result.g);
+  Serial.println(result.b);
+
+  return result;
+}
 void modifyPaletteColors(COLORS* palette, int numColors) {
   curColorLength = numColors;
   for (int i = 0; i < numColors; i++) {
