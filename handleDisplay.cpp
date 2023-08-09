@@ -85,6 +85,7 @@ void handleAnimPlay() {
       return;
     };
     file.close();
+    delay(animSpeed);
   }
   dir.close();
 }

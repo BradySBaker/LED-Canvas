@@ -44,9 +44,9 @@ void drawFallingPixel(int barHeight, int x) {
   }
   if (fallingPixels[x] > 0) {
     const int fallPos =  pgm_read_word(&LED_MAP[15-fallingPixels[x]][x]);
-    leds[fallPos].r = paletteColors[2].r;
-    leds[fallPos].g = paletteColors[2].g;
-    leds[fallPos].b = paletteColors[2].b;
+    leds[fallPos].r = paletteColors[curColorLength].r;
+    leds[fallPos].g = paletteColors[curColorLength].g;
+    leds[fallPos].b = paletteColors[curColorLength].b;
   }
 };
 

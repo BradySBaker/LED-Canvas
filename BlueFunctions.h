@@ -42,6 +42,7 @@ extern int raindropAmount;
 extern int curColorLength;
 extern COLORS paletteColors[6];
 extern String background;
+extern int animSpeed;
 //AV vars
 extern bool avActive;
 

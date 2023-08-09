@@ -15,7 +15,7 @@ String playingAnim = "~";
 COLORS hexToRGB(const char* hexColorString) {
   COLORS result;
   unsigned long colorInt = 0;
-  
+
   for (int i = 0; i < 6; i++) {
     if (hexColorString[i] >= '0' && hexColorString[i] <= '9') {
       colorInt = colorInt + (((long)hexColorString[i] - '0') << ((5 - i) * 4));
@@ -61,6 +61,7 @@ COLORS paletteColors[6] = {};
 bool raining = false;
 int raindropAmount = 5;
 int curColorLength = 0;
+int animSpeed = 0;
 String background = "~";
 
 // AV variables

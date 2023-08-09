@@ -15,6 +15,7 @@ void handleBluetooth() {
    if(strstr(charBuffer, "OFF") == &charBuffer[0]) { //Handle off signal
       FastLED.clear();
       FastLED.show();
+      animSpeed = 5;
       playingAnim = "~";
       bluetooth.print("OFF");
     } else if (strstr(charBuffer, "B") == &charBuffer[0]) { // Handle brightness
@@ -80,7 +81,10 @@ void handleBluetooth() {
       handleFrameSave(charBuffer, true);
     } else if (strstr(charBuffer, "I") == &charBuffer[0]) { //Handle animation play
      char nameString[7] = "";
-     strcpy(nameString, &charBuffer[1]);
+     char animSpeedString[1] = "";
+     strcpy(animSpeedString, &charBuffer[1]);
+     strcpy(nameString, &charBuffer[2]);
+     animSpeed = pow(5-atoi(animSpeedString), 5);
      playingAnim = String(nameString);
      bluetooth.print("success");
     } else if (strstr(charBuffer, "Z") == &charBuffer[0]) { //Handle animation delete
